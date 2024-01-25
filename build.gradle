@@ -1,0 +1,165 @@
+plugins {
+    id 'java'
+    id 'eclipse'    // Apply the 'eclipse' plugin so we can generate Eclipse project files
+    id 'idea'       // Apply the 'idea' plugin so we can generate IntelliJ project files
+    id 'checkstyle' // Apply the 'checkstyle' plugin so we can check our code style
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+
+// This project uses a few 3rd party libraries. Rather then downloading
+// and installing them manually, which can be highly error-prone, we
+// have Gradle do it for us. In the "repositories" section, we specify
+// where we want to search for these 3rd party packages.
+repositories {
+    // Maven central is a website containing a large collection of
+    // 3rd party libraries. It was originally meant to be used with the
+    // Maven build tool, but it's so comprehensive other build tools decided
+    // to just use this one instead of building a similar website.
+    //
+    // mavenLocal() refers a folder in your computer that contains any
+    // libraries you may have already pre-downloaded; mavenCentral refers to
+    // the actual website.
+    mavenLocal()
+    mavenCentral()
+}
+
+// Here, we list all the different libraries we plan on using.
+// Gradle will automatically download them from the repositories listed above.
+dependencies {
+//    assert project.hasProperty("checkstyleVersion")
+//
+//    checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.8.1')
+}
+
+sourceSets.main.java.srcDirs = ['src']
+sourceSets.test.java.srcDirs = ['tst']
+
+ext {
+    createPngClass = "tst.CreatePng.java"
+}
+
+//testSet.main.java.tstDirs = ['tst']
+// Log stdout and stderr in tests
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        events = ["passed", "skipped", "failed"]
+        exclude '*CreatePngTest*'
+        showStandardStreams = true
+        exceptionFormat = "full"
+    }
+}
+
+task createPngSize1(type: Test) {
+    filter {
+        includeTestsMatching '*CreatePngTest.generateMortarSize1*'
+    }
+    useJUnitPlatform()
+}
+
+task createPngSize2(type: Test) {
+    filter {
+        includeTestsMatching '*CreatePngTest.generateMortarSize2*'
+    }
+    useJUnitPlatform()
+}
+
+task testPngSize1(type: Test) {
+    filter {
+        includeTestsMatching '*CafeWallTest.test1*'
+    }
+    testLogging {
+        events = ["passed", "skipped", "failed"]
+        exclude 'CreatePngTest*'
+        showStandardStreams = false
+        exceptionFormat = "full"
+    }
+
+    doFirst {
+        try {
+            tasks.createPngSize1.executeTests()
+        }
+        catch (ignored){}
+    }
+
+    useJUnitPlatform()
+
+    testLogging {
+        events = ["passed", "skipped", "failed"]
+        showStandardStreams = true
+        exceptionFormat = "full"
+    }
+}
+
+
+task testPngSize2(type: Test) {
+    filter {
+        includeTestsMatching '*CafeWallTest.test2*'
+    }
+    testLogging {
+        events = ["passed", "skipped", "failed"]
+        exclude 'CreatePngTest*'
+        showStandardStreams = false
+        exceptionFormat = "full"
+    }
+
+    doFirst {
+        try {
+            tasks.createPngSize2.executeTests()
+        }
+        catch (ignored){}
+    }
+
+    useJUnitPlatform()
+
+    testLogging {
+        events = ["passed", "skipped", "failed"]
+        showStandardStreams = true
+        exceptionFormat = "full"
+    }
+}
+
+// for if test is ran
+test.dependsOn createPngSize1
+test.dependsOn createPngSize2
+
+// for if test want to be ran individually
+testPngSize1.dependsOn createPngSize1
+testPngSize2.dependsOn createPngSize2
+
+checkstyle {
+    toolVersion '10.12.3'
+    configFile file("${project.rootDir}/config/checkstyle/checkstyle.xml")
+    ignoreFailures = true;
+}
+
+checkstyleMain {
+    enabled = true
+    source ='src'   // changed from default of 'src/main'
+    ignoreFailures = true   // Set ignoreFailures to true to ignore checkstyle errors and continue build
+
+    exclude '*DrawingPanel.java'
+}
+
+checkstyleTest {
+    enabled = false
+    source ='tst'
+    ignoreFailures = true;
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+
+    systemProperty 'java.util.logging.config.file', '${project.rootDir}/config/logging.properties'
+
+    forkEvery = 1
+
+    testLogging {
+        showStandardStreams = true
+    }
+}

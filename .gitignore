@@ -1,0 +1,21 @@
+##############################
+## IntelliJ
+##############################
+.idea
+*.iws
+*.iml
+*.ipr
+/out/
+
+output1.png
+output2.png
+
+##############################
+## Gradle
+##############################
+bin/
+build/
+.gradle
+.gradletasknamecache
+gradle-app.setting
+!gradle-wrapper.jar

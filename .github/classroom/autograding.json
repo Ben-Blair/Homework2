@@ -1,0 +1,35 @@
+{
+  "_comment":  "This is not used by the workflow because the autograder action is not called.  See README.txt file for more information.",
+  "tests": [
+    {
+      "name": "testMortarSize1",
+      "setup": "",
+      "run": "gradle tstPngSize1",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "testMortarSize2",
+      "setup": "",
+      "run": "gradle testPngSize2",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "styleTest",
+      "setup": "",
+      "run": "gradle checkstyleMain",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    }
+  ]
+}
