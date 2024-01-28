@@ -1,13 +1,7 @@
 /*
- * Created by YOUR_NAME on DATE
+ * Created by BEN BLAIR on 28 JANUARY 2024
+ * Used Generative AI: ChatGPT
  *
- * Add comments that describe the overall program
- *
- * Additional Instructions (that can be removed once your solution is entered):
- *    You shouldn't use any if-else statements
- *    Put comments in your code
- *    Follow freedom of information rule specified in the Syllabus (i.e., "Discussed with: XXX",
- *       "Used Generative AI: XXX", etc.)
  */
 
 import java.awt.*;
@@ -21,13 +15,16 @@ public class CafeWall {
 
     public static void main(String[] args) throws IOException {
         //Initialize pane (Change the parameters in below line according to spec!)
-        DrawingPanel panel = initializePanel(100, 100, Color.ORANGE);
+        DrawingPanel panel = initializePanel(650, 420, Color.GRAY);
         //Write your code here
+        //drawRow(3, 25, 0, 0, panel.getGraphics());
+        drawRow(0, 0, 3, 25, panel.getGraphics());
+        drawRow(60, 70, 4, 35, panel.getGraphics());
 
-
-        //Remove this comment and below line and implement your code
-        System.out.println("Import Success! Now delete this code and implement your own!");
-
+        drawGrid(15, 140, 5, 22, 0, panel.getGraphics());
+        drawGrid(250, 180, 3, 25, 15, panel.getGraphics());
+        drawGrid(425, 200, 5, 20, 15, panel.getGraphics());
+        drawGrid(460, 15, 3, 25, 30, panel.getGraphics());
 
         //Save the drawing into png file
         panel.save("output" + mortar + ".png"); //Do not remove (this code must be the last statement in main)
@@ -53,4 +50,31 @@ public class CafeWall {
         //Return the panel object
         return panel;
     }
+
+    public static void drawRow(int x, int y, int number, int size, Graphics g) {
+        for (int boxes = 0; boxes < number; boxes++) {
+            int boxX = x + 2 * boxes * size;
+            g.setColor(Color.BLACK);
+            // Draw black box
+            g.fillRect(boxX, y, size, size);
+            g.setColor(Color.BLUE);
+            // Draw an "X" inside each black box
+            g.drawLine(boxX, y, boxX + size - 1, y + size - 1);
+            g.drawLine(boxX , y + size - 1, boxX + size - 1, y);
+            g.setColor(Color.WHITE);
+            // Draw White Box
+            g.fillRect(boxX + size, y, size, size);
+        }
+    }
+
+    public static void drawGrid(int x, int y, int number, int size, int offset, Graphics g) {
+        for (int i = 0; i < number * 2; i++) {
+            // xOffset will be 0 if i is even
+            // xOffset will be 1 if i is odd
+            int xOffset = (i % 2) * offset;
+            drawRow(x + xOffset, y + i * (size + mortar), number, size, g);
+        }
+    }
+
 }
+
