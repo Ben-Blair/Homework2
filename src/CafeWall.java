@@ -1,6 +1,9 @@
 /*
  * Created by BEN BLAIR on 28 JANUARY 2024
  * Used Generative AI: ChatGPT
+ * This code functions by drawing rows of black and white boxes with a blue "X" centered
+ * on the black boxes.
+ * Draw grid creates a grid of the rows.
  *
  */
 
@@ -20,12 +23,10 @@ public class CafeWall {
         //drawRow(3, 25, 0, 0, panel.getGraphics());
         drawRow(0, 0, 3, 25, panel.getGraphics());
         drawRow(60, 70, 4, 35, panel.getGraphics());
-
         drawGrid(15, 140, 5, 22, 0, panel.getGraphics());
         drawGrid(250, 180, 3, 25, 15, panel.getGraphics());
         drawGrid(425, 200, 5, 20, 15, panel.getGraphics());
         drawGrid(460, 15, 3, 25, 30, panel.getGraphics());
-
         //Save the drawing into png file
         panel.save("output" + mortar + ".png"); //Do not remove (this code must be the last statement in main)
     }
@@ -71,6 +72,7 @@ public class CafeWall {
         for (int i = 0; i < number * 2; i++) {
             // xOffset will be 0 if i is even
             // xOffset will be 1 if i is odd
+            //This helps creates the optical illusion
             int xOffset = (i % 2) * offset;
             drawRow(x + xOffset, y + i * (size + mortar), number, size, g);
         }
