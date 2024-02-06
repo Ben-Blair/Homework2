@@ -3,7 +3,7 @@
  * Used Generative AI: ChatGPT
  * This code functions by drawing rows of black and white boxes with a blue "X" centered
  * on the black boxes.
- * Draw grid creates a grid of the rows.
+ * Draw row creates a row of the grids.
  *
  */
 
